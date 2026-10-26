@@ -117,30 +117,39 @@ def build_oa_rates(df):
         / txn
         * 1000
     )
+
     # BFF / 1000 Txns
     df["BFF_Rate"] = (
         df["Suspicious_BFF_Discount_Transactions"]
         / txn
         * 1000
     )
+
     # Multiple Tender / 1000 Txns
     df["MultipleTender_Rate"] = (
-        df["Bistro_GC_Other_Tender_Transactions"]
+        (
+            df["Bistro_GC_Other_Tender_Transactions"]
+            + df["Irregular_MT_Cash_Amount"]
+        )
         / txn
         * 1000
     )
+    
     # Beyond Store Hours / 1000 Txns
     df["BeyondHours_Rate"] = (
-        df["NonSale_Beyond_Store_Hours"]
+        (
+            df["NonSale_Beyond_Store_Hours"]
+            + df["Sale_Beyond_Store_Hours"]
+        )
         / txn
         * 1000
     )
+
     # Manager Meal / 1000 Txns
     df["ManagerMeal_Rate"] = (
         (
             df["Manager_Meal_Peak_Hours"]
-            +
-            df["Manager_Meal_Takeout"]
+            + df["Manager_Meal_Takeout"]
         )
         / txn
         * 1000
